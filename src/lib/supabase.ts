@@ -76,7 +76,7 @@ export const orderService = {
     customer_name: string
     customer_phone: string
     customer_address: string
-    total_amount: number
+    total: number
     order_items: {
       menu_item_id: number
       quantity: number
@@ -92,7 +92,8 @@ export const orderService = {
         customer_name: orderData.customer_name,
         customer_phone: orderData.customer_phone,
         customer_address: orderData.customer_address,
-        total_amount: orderData.total_amount,
+        total: orderData.total,
+        total_amount: orderData.total,
         status: 'pending'
       })
       .select()

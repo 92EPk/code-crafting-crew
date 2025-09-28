@@ -98,32 +98,23 @@ export const useRestaurant = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from('menu_items')
-        .select(`
-          *,
-          categories(name_ar, name_en, description_ar, description_en)
-        `)
+        .select('*')
         .order('sort_order');
 
       if (error) throw error;
-      
-      // Transform data to match our simplified structure
-      const transformedData: SimpleMenuItem[] = (data || []).map(item => ({
+
+      const menuItemsWithCategoryInfo = (data || []).map(item => ({
         ...item,
-        allow_customization: item.allow_customization || false,
-        customization_options: Array.isArray(item.customization_options) 
-          ? item.customization_options as unknown as CustomizationOption[]
-          : [],
-        category_info: (item.category_info && typeof item.category_info === 'object') 
-          ? item.category_info as any
-          : {
-              name_ar: item.categories?.name_ar || '',
-              name_en: item.categories?.name_en || '',
-              description_ar: item.categories?.description_ar,
-              description_en: item.categories?.description_en,
-            }
+        category_info: {
+          name_ar: '',
+          name_en: '',
+          description_ar: '',
+          description_en: '',
+        },
+        customization_options: []
       }));
 
-      setMenuItems(transformedData);
+      setMenuItems(menuItemsWithCategoryInfo);
     } catch (error: any) {
       toast.error('Error loading menu items: ' + error.message);
     } finally {
@@ -148,7 +139,10 @@ export const useRestaurant = () => {
 
       const { data, error } = await supabase
         .from('menu_items')
-        .insert(finalData as any)
+        .insert({
+          ...finalData,
+          customization_options: JSON.stringify(finalData.customization_options || [])
+        } as any)
         .select()
         .single();
 
@@ -160,9 +154,12 @@ export const useRestaurant = () => {
         customization_options: Array.isArray(data.customization_options) 
           ? data.customization_options as unknown as CustomizationOption[]
           : [],
-        category_info: (data.category_info && typeof data.category_info === 'object') 
-          ? data.category_info as any
-          : {}
+        category_info: {
+          name_ar: category?.name_ar || '',
+          name_en: category?.name_en || '',
+          description_ar: category?.description_ar || '',
+          description_en: category?.description_en || '',
+        }
       };
       
       setMenuItems(prev => [...prev, transformedData]);
@@ -176,38 +173,38 @@ export const useRestaurant = () => {
 
   const updateMenuItem = async (id: string, updates: Partial<SimpleMenuItem>) => {
     try {
-      const { data, error } = await supabase.rpc('update_menu_item_simple', {
-        item_id: id,
-        item_data: JSON.parse(JSON.stringify(updates)),
-        customization_data: JSON.parse(JSON.stringify(updates.customization_options || []))
-      });
-
-      if (error) throw error;
-      
-      // Refetch the updated item
-      const { data: updatedItem, error: fetchError } = await supabase
+      // Direct update since RPC might not be available yet
+      const { data: updateData, error: updateError } = await supabase
         .from('menu_items')
-        .select('*')
+        .update({
+          ...updates,
+          customization_options: JSON.stringify(updates.customization_options || [])
+        } as any)
         .eq('id', id)
+        .select()
         .single();
-        
-      if (fetchError) throw fetchError;
-      
-      setMenuItems(prev => prev.map(item => 
-        item.id === id ? {
-          ...updatedItem,
-          allow_customization: updatedItem.allow_customization || false,
-          customization_options: Array.isArray(updatedItem.customization_options) 
-            ? updatedItem.customization_options as unknown as CustomizationOption[]
-            : [],
-          category_info: (updatedItem.category_info && typeof updatedItem.category_info === 'object') 
-            ? updatedItem.category_info as any
-            : {}
-        } : item
-      ));
+
+      if (updateError) throw updateError;
+
+      const menuItemWithCategoryInfo = {
+        ...updateData,
+        category_info: {
+          name_ar: '',
+          name_en: '',
+          description_ar: '',
+          description_en: '',
+        },
+        customization_options: []
+      };
+
+      setMenuItems(prev => 
+        prev.map(item => 
+          item.id === id ? menuItemWithCategoryInfo : item
+        )
+      );
       
       toast.success('Menu item updated successfully');
-      return { data: updatedItem, error: null };
+      return { data: menuItemWithCategoryInfo, error: null };
     } catch (error: any) {
       toast.error('Error updating menu item: ' + error.message);
       return { data: null, error };
