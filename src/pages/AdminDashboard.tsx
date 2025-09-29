@@ -21,6 +21,10 @@ import { toast } from "sonner";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import CategoryManagement from "@/pages/admin/CategoryManagement";
 import ProductManagement from "@/pages/admin/ProductManagement";
+import OffersManagement from "@/pages/admin/OffersManagement";
+import OrdersManagement from "@/pages/admin/OrdersManagement";
+import CustomizationManagement from "@/pages/admin/CustomizationManagement";
+import AnalyticsManagement from "@/pages/admin/AnalyticsManagement";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -258,8 +262,12 @@ const AdminDashboard = () => {
                   </Card>
                 </>
               } />
-              <Route path="/categories" element={<CategoryManagement />} />
-              <Route path="/products" element={<ProductManagement />} />
+              <Route path="categories" element={<CategoryManagement />} />
+              <Route path="products" element={<ProductManagement />} />
+              <Route path="offers" element={<OffersManagement />} />
+              <Route path="orders" element={<OrdersManagement />} />
+              <Route path="customization" element={<CustomizationManagement />} />
+              <Route path="analytics" element={<AnalyticsManagement />} />
             </Routes>
           </div>
 
