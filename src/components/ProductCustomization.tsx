@@ -206,7 +206,7 @@ const ProductCustomization = ({
                 </div>
               ) : (
                 Object.entries(optionsByType).map(([optionType, options]) => 
-                  renderOptionGroup(optionType, options)
+                  renderOptionGroup(optionType, Array.isArray(options) ? options : [])
                 )
               )}
             </div>
