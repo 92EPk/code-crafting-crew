@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
-import HeroSection from "@/components/HeroSection";
-import LandingFeatures from "@/components/LandingFeatures";
+import ModernHero from "@/components/ModernHero";
+import FeaturedDishes from "@/components/FeaturedDishes";
+import WhyChooseUs from "@/components/WhyChooseUs";
 import OffersSection from "@/components/OffersSection";
+import TestimonialsSection from "@/components/TestimonialsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import CartSidebar from "@/components/CartSidebar";
@@ -114,22 +116,28 @@ const Index = () => {
 
       {/* Main Content */}
       <main>
-        {/* Hero Section */}
-        <HeroSection 
-          language={language}
+        {/* Modern Hero Section */}
+        <ModernHero 
           onOrderClick={handleOrderClick}
+        />
+
+        {/* Featured Dishes */}
+        <FeaturedDishes 
           onAddToCart={handleAddToCart}
         />
 
-        {/* Landing Features */}
-        <LandingFeatures 
-          language={language}
-        />
+        {/* Why Choose Us */}
+        <WhyChooseUs />
 
-        {/* Offers Section */}
+        {/* Special Offers */}
         <OffersSection 
           language={language}
           onAddToCart={handleAddToCart}
+        />
+
+        {/* Testimonials */}
+        <TestimonialsSection 
+          language={language}
         />
 
         {/* Contact Section */}
