@@ -23,7 +23,7 @@ import CategoryManagement from "@/pages/admin/CategoryManagement";
 import ProductManagement from "@/pages/admin/ProductManagement";
 import OffersManagement from "@/pages/admin/OffersManagement";
 import OrdersManagement from "@/pages/admin/OrdersManagement";
-import CustomizationManagement from "@/pages/admin/CustomizationManagement";
+import AttributeManagement from "@/pages/admin/AttributeManagement";
 import AnalyticsManagement from "@/pages/admin/AnalyticsManagement";
 
 const AdminDashboard = () => {
@@ -133,7 +133,7 @@ const AdminDashboard = () => {
 
           <div className="container mx-auto px-4 py-8">
             <Routes>
-              <Route path="/" element={
+              <Route index element={
                 <>
                   {/* Enhanced Stats Overview */}
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -264,9 +264,9 @@ const AdminDashboard = () => {
               } />
               <Route path="categories" element={<CategoryManagement />} />
               <Route path="products" element={<ProductManagement />} />
-              <Route path="offers" element={<OffersManagement />} />
               <Route path="orders" element={<OrdersManagement />} />
-              <Route path="customization" element={<CustomizationManagement />} />
+              <Route path="offers" element={<OffersManagement />} />
+              <Route path="attributes" element={<AttributeManagement />} />
               <Route path="analytics" element={<AnalyticsManagement />} />
             </Routes>
           </div>

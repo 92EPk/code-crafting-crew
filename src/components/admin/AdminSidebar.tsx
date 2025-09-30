@@ -33,7 +33,7 @@ import { toast } from 'sonner';
 const menuItems = [
   {
     title: { ar: 'لوحة التحكم', en: 'Dashboard' },
-    url: '/admin/dashboard',
+    url: '/admin',
     icon: Home
   },
   {
@@ -47,11 +47,6 @@ const menuItems = [
     icon: Package
   },
   {
-    title: { ar: 'إدارة التخصيص', en: 'Customization' },
-    url: '/admin/customization',
-    icon: Settings
-  },
-  {
     title: { ar: 'إدارة الطلبات', en: 'Orders' },
     url: '/admin/orders',
     icon: ShoppingCart
@@ -60,6 +55,11 @@ const menuItems = [
     title: { ar: 'العروض الخاصة', en: 'Special Offers' },
     url: '/admin/offers',
     icon: Utensils
+  },
+  {
+    title: { ar: 'إدارة الخصائص', en: 'Attributes' },
+    url: '/admin/attributes',
+    icon: Settings
   },
   {
     title: { ar: 'التقارير', en: 'Analytics' },

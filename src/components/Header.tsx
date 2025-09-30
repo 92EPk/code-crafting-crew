@@ -62,10 +62,10 @@ const Header = ({ cartItemsCount, onCartClick }: HeaderProps) => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8 rtl:space-x-reverse" dir={isRTL ? 'rtl' : 'ltr'}>
-            <a href="#home" className={`text-foreground hover:text-primary transition-colors font-medium ${isRTL ? 'font-arabic' : ''}`}>
+            <Link to="/" className={`text-foreground hover:text-primary transition-colors font-medium ${isRTL ? 'font-arabic' : ''}`}>
               {t.home}
-            </a>
-            <Link to="/full-menu" className={`text-foreground hover:text-primary transition-colors font-medium ${isRTL ? 'font-arabic' : ''}`}>
+            </Link>
+            <Link to="/menu" className={`text-foreground hover:text-primary transition-colors font-medium ${isRTL ? 'font-arabic' : ''}`}>
               {t.fullMenu}
             </Link>
             <a href="#contact" className={`text-foreground hover:text-primary transition-colors font-medium ${isRTL ? 'font-arabic' : ''}`}>
@@ -136,10 +136,10 @@ const Header = ({ cartItemsCount, onCartClick }: HeaderProps) => {
         {isMenuOpen && (
           <nav className="md:hidden mt-4 pb-4 border-t border-border" dir={isRTL ? 'rtl' : 'ltr'}>
             <div className="flex flex-col space-y-3 pt-4">
-              <a href="#home" className={`text-foreground hover:text-primary transition-colors font-medium ${isRTL ? 'font-arabic' : ''}`}>
+              <Link to="/" className={`text-foreground hover:text-primary transition-colors font-medium ${isRTL ? 'font-arabic' : ''}`}>
                 {t.home}
-              </a>
-              <Link to="/full-menu" className={`text-foreground hover:text-primary transition-colors font-medium ${isRTL ? 'font-arabic' : ''}`}>
+              </Link>
+              <Link to="/menu" className={`text-foreground hover:text-primary transition-colors font-medium ${isRTL ? 'font-arabic' : ''}`}>
                 {t.fullMenu}
               </Link>
               <a href="#contact" className={`text-foreground hover:text-primary transition-colors font-medium ${isRTL ? 'font-arabic' : ''}`}>
