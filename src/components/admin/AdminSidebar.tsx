@@ -91,13 +91,13 @@ export function AdminSidebar() {
 
   return (
     <Sidebar
-      className={`${collapsed ? "w-14" : "w-60"} bg-background-dark border-border transition-all duration-300`}
+      className={`${collapsed ? "w-14" : "w-60"} bg-gray-900 border-gray-800 transition-all duration-300`}
       collapsible="icon"
       side={isRTL ? "right" : "left"}
     >
-      <SidebarTrigger className="m-2 self-end text-white hover:text-primary" />
+      <SidebarTrigger className="m-2 self-end text-gray-300 hover:text-white" />
 
-      <SidebarContent className="p-4 space-y-4 bg-background-dark">
+      <SidebarContent className="p-4 space-y-4 bg-gray-900">
         {/* Header */}
         {!collapsed && (
           <div className="text-center pb-4 border-b border-border/50">
