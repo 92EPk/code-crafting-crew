@@ -91,27 +91,27 @@ export function AdminSidebar() {
 
   return (
     <Sidebar
-      className={`${collapsed ? "w-14" : "w-60"} border-r transition-all duration-300`}
+      className={`${collapsed ? "w-14" : "w-60"} bg-background-dark border-border transition-all duration-300`}
       collapsible="icon"
       side={isRTL ? "right" : "left"}
     >
-      <SidebarTrigger className="m-2 self-end" />
+      <SidebarTrigger className="m-2 self-end text-white hover:text-primary" />
 
-      <SidebarContent className="p-4 space-y-4">
+      <SidebarContent className="p-4 space-y-4 bg-background-dark">
         {/* Header */}
         {!collapsed && (
-          <div className="text-center pb-4 border-b">
-            <h2 className={`text-xl font-bold text-primary ${isRTL ? 'font-arabic' : ''}`}>
+          <div className="text-center pb-4 border-b border-border/50">
+            <h2 className={`text-xl font-bold text-white ${isRTL ? 'font-arabic' : ''}`}>
               {language === 'ar' ? 'لوحة التحكم' : 'Admin Panel'}
             </h2>
-            <p className={`text-sm text-muted-foreground ${isRTL ? 'font-arabic' : ''}`}>
+            <p className={`text-sm text-gray-400 ${isRTL ? 'font-arabic' : ''}`}>
               Mix & Taste
             </p>
           </div>
         )}
 
         <SidebarGroup>
-          <SidebarGroupLabel className={isRTL ? 'font-arabic' : ''}>
+          <SidebarGroupLabel className={`text-gray-300 ${isRTL ? 'font-arabic' : ''}`}>
             {language === 'ar' ? 'القائمة الرئيسية' : 'Main Menu'}
           </SidebarGroupLabel>
 
@@ -122,10 +122,16 @@ export function AdminSidebar() {
                   <SidebarMenuButton asChild>
                     <NavLink 
                       to={item.url} 
-                      className={getNavCls}
+                      className={({ isActive }) => 
+                        `flex items-center gap-3 px-3 py-2 rounded-lg transition-all ${
+                          isActive 
+                            ? 'bg-primary text-white font-semibold shadow-lg' 
+                            : 'text-gray-300 hover:bg-white/10 hover:text-white'
+                        }`
+                      }
                       end
                     >
-                      <item.icon className={`h-5 w-5 ${collapsed ? '' : 'mr-3'} ${isRTL && !collapsed ? 'ml-3 mr-0' : ''}`} />
+                      <item.icon className="h-5 w-5" />
                       {!collapsed && (
                         <span className={isRTL ? 'font-arabic' : ''}>
                           {item.title[language]}
@@ -140,11 +146,11 @@ export function AdminSidebar() {
         </SidebarGroup>
 
         {/* Bottom Actions */}
-        <div className="mt-auto space-y-2 pt-4 border-t">
+        <div className="mt-auto space-y-2 pt-4 border-t border-border/50">
           <Button 
-            variant="outline" 
+            variant="ghost" 
             size="sm"
-            className="w-full justify-start"
+            className="w-full justify-start text-gray-300 hover:text-white hover:bg-white/10"
             onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')}
           >
             <Globe className={`h-4 w-4 ${collapsed ? '' : 'mr-2'} ${isRTL && !collapsed ? 'ml-2 mr-0' : ''}`} />
@@ -156,9 +162,9 @@ export function AdminSidebar() {
           </Button>
 
           <Button 
-            variant="outline" 
+            variant="ghost" 
             size="sm"
-            className="w-full justify-start text-destructive hover:text-destructive"
+            className="w-full justify-start text-red-400 hover:text-red-300 hover:bg-red-500/10"
             onClick={handleLogout}
           >
             <LogOut className={`h-4 w-4 ${collapsed ? '' : 'mr-2'} ${isRTL && !collapsed ? 'ml-2 mr-0' : ''}`} />

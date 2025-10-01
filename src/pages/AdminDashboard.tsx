@@ -102,27 +102,32 @@ const AdminDashboard = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gradient-to-br from-background via-background/50 to-primary/5" dir={isRTL ? 'rtl' : 'ltr'}>
+      <div className="min-h-screen flex w-full bg-gradient-to-br from-gray-50 via-white to-primary/5" dir={isRTL ? 'rtl' : 'ltr'}>
         <AdminSidebar />
         
         <main className="flex-1">
-          {/* Header */}
-          <div className="border-b bg-background/95 backdrop-blur-sm sticky top-0 z-10">
-            <div className="container mx-auto px-4 py-4">
+          {/* Modern Header */}
+          <div className="border-b bg-white/80 backdrop-blur-md sticky top-0 z-10 shadow-sm">
+            <div className="container mx-auto px-6 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <SidebarTrigger className="md:hidden" />
-                  <h1 className={`text-2xl font-bold ${isRTL ? 'font-arabic' : ''}`}>
-                    {t.adminDashboard}
-                  </h1>
-                  <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                  <SidebarTrigger className="md:hidden hover:bg-primary/10 transition-colors" />
+                  <div>
+                    <h1 className={`text-2xl font-bold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent ${isRTL ? 'font-arabic' : ''}`}>
+                      {t.adminDashboard}
+                    </h1>
+                    <p className={`text-sm text-gray-500 mt-0.5 ${isRTL ? 'font-arabic' : ''}`}>
+                      {language === 'ar' ? 'إدارة المطعم بكفاءة' : 'Manage your restaurant efficiently'}
+                    </p>
+                  </div>
+                  <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2 animate-pulse"></div>
                     {t.connected}
                   </Badge>
                 </div>
                 
-                <div className="flex items-center gap-4">
-                  <Button variant="outline" size="sm">
+                <div className="flex items-center gap-3">
+                  <Button variant="outline" size="sm" className="shadow-sm hover:shadow-md transition-shadow">
                     <Bell className="h-4 w-4 mr-2" />
                     {t.notifications}
                   </Button>
@@ -131,67 +136,75 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          <div className="container mx-auto px-4 py-8">
+          <div className="container mx-auto px-6 py-8">
             <Routes>
               <Route index element={
                 <>
-                  {/* Enhanced Stats Overview */}
+                  {/* Modern Stats Overview */}
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <Card className="hover:shadow-lg transition-shadow">
+                    <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-l-4 border-l-primary bg-gradient-to-br from-white to-primary/5">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className={`text-sm font-medium ${isRTL ? 'font-arabic' : ''}`}>
+                        <CardTitle className={`text-sm font-medium text-gray-600 ${isRTL ? 'font-arabic' : ''}`}>
                           {t.totalOrders}
                         </CardTitle>
-                        <ShoppingBag className="h-4 w-4 text-muted-foreground" />
+                        <div className="p-2 bg-primary/10 rounded-lg">
+                          <ShoppingBag className="h-5 w-5 text-primary" />
+                        </div>
                       </CardHeader>
                       <CardContent>
-                        <div className="text-3xl font-bold text-primary">{stats.totalOrders}</div>
-                        <p className={`text-xs text-muted-foreground ${isRTL ? 'font-arabic' : ''}`}>
+                        <div className="text-4xl font-bold text-primary mb-1">{stats.totalOrders}</div>
+                        <p className={`text-xs text-gray-500 ${isRTL ? 'font-arabic' : ''}`}>
                           {language === 'ar' ? 'جميع الطلبات في النظام' : 'All orders in system'}
                         </p>
                       </CardContent>
                     </Card>
 
-                    <Card className="hover:shadow-lg transition-shadow">
+                    <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-l-4 border-l-yellow-500 bg-gradient-to-br from-white to-yellow-50">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className={`text-sm font-medium ${isRTL ? 'font-arabic' : ''}`}>
+                        <CardTitle className={`text-sm font-medium text-gray-600 ${isRTL ? 'font-arabic' : ''}`}>
                           {t.pendingOrders}
                         </CardTitle>
-                        <Clock className="h-4 w-4 text-muted-foreground" />
+                        <div className="p-2 bg-yellow-100 rounded-lg">
+                          <Clock className="h-5 w-5 text-yellow-600" />
+                        </div>
                       </CardHeader>
                       <CardContent>
-                        <div className="text-3xl font-bold text-yellow-600">{stats.pendingOrders}</div>
-                        <p className={`text-xs text-muted-foreground ${isRTL ? 'font-arabic' : ''}`}>
+                        <div className="text-4xl font-bold text-yellow-600 mb-1">{stats.pendingOrders}</div>
+                        <p className={`text-xs text-gray-500 ${isRTL ? 'font-arabic' : ''}`}>
                           {t.needsAttention}
                         </p>
                       </CardContent>
                     </Card>
 
-                    <Card className="hover:shadow-lg transition-shadow">
+                    <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-l-4 border-l-green-500 bg-gradient-to-br from-white to-green-50">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className={`text-sm font-medium ${isRTL ? 'font-arabic' : ''}`}>
+                        <CardTitle className={`text-sm font-medium text-gray-600 ${isRTL ? 'font-arabic' : ''}`}>
                           {language === 'ar' ? 'الطلبات المكتملة' : 'Completed Orders'}
                         </CardTitle>
-                        <CheckCircle className="h-4 w-4 text-muted-foreground" />
+                        <div className="p-2 bg-green-100 rounded-lg">
+                          <CheckCircle className="h-5 w-5 text-green-600" />
+                        </div>
                       </CardHeader>
                       <CardContent>
-                        <div className="text-3xl font-bold text-green-600">{stats.completedOrders}</div>
-                        <p className={`text-xs text-muted-foreground ${isRTL ? 'font-arabic' : ''}`}>
+                        <div className="text-4xl font-bold text-green-600 mb-1">{stats.completedOrders}</div>
+                        <p className={`text-xs text-gray-500 ${isRTL ? 'font-arabic' : ''}`}>
                           {language === 'ar' ? 'تم توصيلها بنجاح' : 'Successfully delivered'}
                         </p>
                       </CardContent>
                     </Card>
 
-                    <Card className="hover:shadow-lg transition-shadow">
+                    <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-l-4 border-l-emerald-500 bg-gradient-to-br from-white to-emerald-50">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className={`text-sm font-medium ${isRTL ? 'font-arabic' : ''}`}>
+                        <CardTitle className={`text-sm font-medium text-gray-600 ${isRTL ? 'font-arabic' : ''}`}>
                           {t.totalRevenue}
                         </CardTitle>
-                        <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                        <div className="p-2 bg-emerald-100 rounded-lg">
+                          <TrendingUp className="h-5 w-5 text-emerald-600" />
+                        </div>
                       </CardHeader>
                       <CardContent>
-                        <div className="text-3xl font-bold text-green-600">{stats.totalRevenue.toFixed(2)} {t.egp}</div>
-                        <p className={`text-xs text-muted-foreground ${isRTL ? 'font-arabic' : ''}`}>
+                        <div className="text-4xl font-bold text-emerald-600 mb-1">{stats.totalRevenue.toFixed(2)} {t.egp}</div>
+                        <p className={`text-xs text-gray-500 ${isRTL ? 'font-arabic' : ''}`}>
                           {t.fromCompletedOrders}
                         </p>
                       </CardContent>
@@ -199,13 +212,15 @@ const AdminDashboard = () => {
                   </div>
 
                   {/* Recent Orders */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className={`flex items-center gap-2 ${isRTL ? 'font-arabic' : ''}`}>
-                        <ShoppingBag className="h-5 w-5" />
+                  <Card className="shadow-lg border-0">
+                    <CardHeader className="bg-gradient-to-r from-primary/5 to-accent/5 border-b">
+                      <CardTitle className={`flex items-center gap-3 text-xl ${isRTL ? 'font-arabic' : ''}`}>
+                        <div className="p-2 bg-primary/10 rounded-lg">
+                          <ShoppingBag className="h-5 w-5 text-primary" />
+                        </div>
                         {t.recentOrders}
                       </CardTitle>
-                      <CardDescription className={isRTL ? 'font-arabic' : ''}>
+                      <CardDescription className={`${isRTL ? 'font-arabic' : ''} text-base`}>
                         {t.manageTrackOrders}
                       </CardDescription>
                     </CardHeader>
@@ -227,30 +242,30 @@ const AdminDashboard = () => {
                           </p>
                         </div>
                       ) : (
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                           {orders.slice(0, 10).map((order) => (
                             <div
                               key={order.id}
-                              className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/30 cursor-pointer transition-all duration-200 hover:shadow-md"
+                              className="flex items-center justify-between p-5 border-2 border-transparent rounded-xl hover:border-primary/20 hover:bg-gradient-to-r hover:from-primary/5 hover:to-accent/5 cursor-pointer transition-all duration-300 hover:shadow-lg group"
                               onClick={() => handleOrderClick(order)}
                             >
                               <div className="flex items-center space-x-4 rtl:space-x-reverse">
-                                <div className={`w-3 h-3 rounded-full ${getStatusColor(order.status)}`}></div>
+                                <div className={`w-4 h-4 rounded-full ${getStatusColor(order.status)} shadow-lg group-hover:scale-110 transition-transform`}></div>
                                 <div>
-                                  <p className={`font-medium ${isRTL ? 'font-arabic' : ''}`}>
+                                  <p className={`font-semibold text-gray-800 group-hover:text-primary transition-colors ${isRTL ? 'font-arabic' : ''}`}>
                                     {order.customer_name}
                                   </p>
-                                  <p className="text-sm text-muted-foreground">
+                                  <p className="text-sm text-gray-600">
                                     {order.customer_phone}
                                   </p>
-                                  <p className="text-xs text-muted-foreground">
+                                  <p className="text-xs text-gray-400 mt-0.5">
                                     {new Date(order.created_at).toLocaleDateString(language === 'ar' ? 'ar-EG' : 'en-US')}
                                   </p>
                                 </div>
                               </div>
                               <div className="text-right">
-                                <p className="font-medium">{order.total_amount} {t.egp}</p>
-                                <Badge variant="outline" className="mt-1">
+                                <p className="font-bold text-lg text-primary">{order.total_amount} {t.egp}</p>
+                                <Badge variant="outline" className="mt-2 font-medium">
                                   {getStatusLabel(order.status)}
                                 </Badge>
                               </div>
