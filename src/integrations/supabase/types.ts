@@ -244,24 +244,20 @@ export type Database = {
       menu_items: {
         Row: {
           allow_customization: boolean
-          category: string
           category_id: string | null
           created_at: string
           customization_options: Json | null
-          description: string
           description_ar: string
           description_en: string | null
           discount_price: number | null
           id: string
-          image: string
           image_url: string | null
           is_available: boolean
           is_featured: boolean
           is_offer: boolean
           is_spicy: boolean
-          name: string
           name_ar: string
-          name_en: string | null
+          name_en: string
           prep_time: string
           price: number
           rating: number
@@ -272,24 +268,20 @@ export type Database = {
         }
         Insert: {
           allow_customization?: boolean
-          category: string
           category_id?: string | null
           created_at?: string
           customization_options?: Json | null
-          description: string
-          description_ar: string
+          description_ar?: string
           description_en?: string | null
           discount_price?: number | null
           id?: string
-          image: string
           image_url?: string | null
           is_available?: boolean
           is_featured?: boolean
           is_offer?: boolean
           is_spicy?: boolean
-          name: string
           name_ar: string
-          name_en?: string | null
+          name_en: string
           prep_time?: string
           price: number
           rating?: number
@@ -300,24 +292,20 @@ export type Database = {
         }
         Update: {
           allow_customization?: boolean
-          category?: string
           category_id?: string | null
           created_at?: string
           customization_options?: Json | null
-          description?: string
           description_ar?: string
           description_en?: string | null
           discount_price?: number | null
           id?: string
-          image?: string
           image_url?: string | null
           is_available?: boolean
           is_featured?: boolean
           is_offer?: boolean
           is_spicy?: boolean
-          name?: string
           name_ar?: string
-          name_en?: string | null
+          name_en?: string
           prep_time?: string
           price?: number
           rating?: number

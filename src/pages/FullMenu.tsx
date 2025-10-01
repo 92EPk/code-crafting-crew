@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useMenuItems, useCategories } from "@/hooks/useDatabase";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
+import { supabase } from "@/integrations/supabase/client";
 
 const FullMenu = () => {
   const { language, isRTL } = useLanguage();
@@ -23,8 +24,8 @@ const FullMenu = () => {
   const { toast } = useToast();
   
   // Database hooks
-  const { menuItems, loading } = useMenuItems();
-  const { categories: dbCategories } = useCategories();
+  const { menuItems, loading, fetchMenuItems } = useMenuItems();
+  const { categories: dbCategories, fetchCategories } = useCategories();
 
   const t = translations[language];
 
@@ -45,12 +46,56 @@ const FullMenu = () => {
     localStorage.setItem('mixandtaste-cart', JSON.stringify(cartItems));
   }, [cartItems]);
 
-  // Mock categories for now
+  // Setup realtime subscriptions for database updates
+  useEffect(() => {
+    fetchCategories();
+    fetchMenuItems();
+
+    // Subscribe to menu items changes
+    const menuChannel = supabase
+      .channel('menu-items-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'menu_items'
+        },
+        () => {
+          fetchMenuItems();
+        }
+      )
+      .subscribe();
+
+    // Subscribe to categories changes
+    const categoryChannel = supabase
+      .channel('categories-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'categories'
+        },
+        () => {
+          fetchCategories();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(menuChannel);
+      supabase.removeChannel(categoryChannel);
+    };
+  }, []);
+
+  // Build categories list from database
   const categories = [
     { id: 'all', name: { ar: t.all, en: t.all } },
-    { id: 'mains', name: { ar: t.mainDishes, en: t.mainDishes } },
-    { id: 'appetizers', name: { ar: t.appetizers, en: t.appetizers } },
-    { id: 'sandwiches', name: { ar: t.sandwiches, en: t.sandwiches } },
+    ...dbCategories.map(cat => ({
+      id: cat.id,
+      name: { ar: cat.name_ar, en: cat.name_en }
+    }))
   ];
 
   const addToCart = (product: Product, quantity: number = 1, selectedOptions: SelectedOptions = {}, totalPrice?: number) => {
@@ -108,11 +153,7 @@ const FullMenu = () => {
 
   const filteredProducts = menuItems?.filter((item) => {
     if (selectedCategory === 'all') return true;
-    // Use category_id to match with our predefined categories
-    if (selectedCategory === 'mains') return item.category_id;
-    if (selectedCategory === 'appetizers') return item.category_id;
-    if (selectedCategory === 'sandwiches') return item.category_id;
-    return true;
+    return item.category_id === selectedCategory;
   }) || [];
 
   return (

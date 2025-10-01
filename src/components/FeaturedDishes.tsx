@@ -73,17 +73,17 @@ const FeaturedDishes = ({ onAddToCart }: FeaturedDishesProps) => {
               id: parseInt(item.id) || 0,
               dbId: item.id,
               name: {
-                ar: item.name_ar || item.name || '',
-                en: item.name_en || item.name || ''
+                ar: item.name_ar,
+                en: item.name_en
               },
               description: {
-                ar: item.description_ar || item.description || '',
-                en: item.description_en || item.description || ''
+                ar: item.description_ar,
+                en: item.description_en
               },
               price: item.price,
               discountPrice: item.discount_price,
-              image: item.image_url || item.image || '',
-              categoryId: item.category_id || item.category || '',
+              image: item.image_url || '',
+              categoryId: item.category_id || '',
               rating: item.rating || 4.5,
               prepTime: item.prep_time || '30 دقيقة',
               isSpicy: item.is_spicy || false,

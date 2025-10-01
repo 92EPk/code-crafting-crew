@@ -19,25 +19,21 @@ export interface Category {
 export interface MenuItem {
   id: string;
   category_id?: string;
-  category: string; // Keep existing field for compatibility
-  name: string; // Keep existing field
-  name_ar?: string;
-  name_en?: string;
-  description: string; // Keep existing field
-  description_ar?: string;
-  description_en?: string;
+  name_ar: string;
+  name_en: string;
+  description_ar: string;
+  description_en: string;
   price: number;
   discount_price?: number;
-  image: string; // Keep existing field
   image_url?: string;
-  rating?: number;
-  prep_time?: string;
-  is_spicy?: boolean;
-  is_offer?: boolean;
-  is_available?: boolean;
-  allow_customization?: boolean;
-  is_featured?: boolean;
-  sort_order?: number;
+  rating: number;
+  prep_time: string;
+  is_spicy: boolean;
+  is_offer: boolean;
+  is_available: boolean;
+  allow_customization: boolean;
+  is_featured: boolean;
+  sort_order: number;
   created_at: string;
   updated_at: string;
   customization_options?: any[];
