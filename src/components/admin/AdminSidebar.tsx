@@ -59,7 +59,7 @@ const menuItems = [
   {
     title: { ar: 'إدارة الخصائص', en: 'Attributes' },
     url: '/admin/attributes',
-    icon: Settings
+    icon: ClipboardList
   },
   {
     title: { ar: 'التقارير', en: 'Analytics' },

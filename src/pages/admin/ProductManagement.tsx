@@ -488,10 +488,10 @@ const ProductManagement = () => {
                   
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="text-lg font-bold text-primary">{product.price} {language === 'ar' ? 'ر.س' : 'SAR'}</span>
+                      <span className="text-lg font-bold text-primary">{product.price} {language === 'ar' ? 'ج.م' : 'EGP'}</span>
                       {product.discount_price && (
                         <span className="text-sm text-muted-foreground line-through ml-2">
-                          {product.discount_price} {language === 'ar' ? 'ر.س' : 'SAR'}
+                          {product.discount_price} {language === 'ar' ? 'ج.م' : 'EGP'}
                         </span>
                       )}
                     </div>

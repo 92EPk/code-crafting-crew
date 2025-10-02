@@ -46,47 +46,10 @@ const FullMenu = () => {
     localStorage.setItem('mixandtaste-cart', JSON.stringify(cartItems));
   }, [cartItems]);
 
-  // Setup realtime subscriptions for database updates
+  // Fetch data on mount
   useEffect(() => {
     fetchCategories();
     fetchMenuItems();
-
-    // Subscribe to menu items changes
-    const menuChannel = supabase
-      .channel('menu-items-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'menu_items'
-        },
-        () => {
-          fetchMenuItems();
-        }
-      )
-      .subscribe();
-
-    // Subscribe to categories changes
-    const categoryChannel = supabase
-      .channel('categories-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'categories'
-        },
-        () => {
-          fetchCategories();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(menuChannel);
-      supabase.removeChannel(categoryChannel);
-    };
   }, []);
 
   // Build categories list from database

@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       admin_settings: {
         Row: {
+          delivery_fee: number | null
           id: string
           password_hash: string
           restaurant_name: string
@@ -24,6 +25,7 @@ export type Database = {
           username: string
         }
         Insert: {
+          delivery_fee?: number | null
           id?: string
           password_hash: string
           restaurant_name: string
@@ -32,6 +34,7 @@ export type Database = {
           username: string
         }
         Update: {
+          delivery_fee?: number | null
           id?: string
           password_hash?: string
           restaurant_name?: string

@@ -2,27 +2,51 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit, Trash2, Eye } from "lucide-react";
+import { Plus, Edit, Trash2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useRestaurant } from "@/hooks/useRestaurant";
-import { toast } from "sonner";
+import SpecialOfferDialog from "@/components/admin/SpecialOfferDialog";
 
 const OffersManagement = () => {
   const { language, isRTL } = useLanguage();
-  const { offers, loading } = useRestaurant();
-  const [selectedOffer, setSelectedOffer] = useState(null);
+  const { offers, loading, addOffer, updateOffer, deleteOffer, fetchOffers } = useRestaurant();
+  const [selectedOffer, setSelectedOffer] = useState<any>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleAddOffer = () => {
-    toast.info(language === 'ar' ? 'سيتم إضافة هذه الميزة قريباً' : 'This feature will be added soon');
+    setSelectedOffer(null);
+    setIsDialogOpen(true);
   };
 
   const handleEditOffer = (offer: any) => {
     setSelectedOffer(offer);
-    toast.info(language === 'ar' ? 'سيتم إضافة هذه الميزة قريباً' : 'This feature will be added soon');
+    setIsDialogOpen(true);
   };
 
-  const handleDeleteOffer = (offerId: string) => {
-    toast.info(language === 'ar' ? 'سيتم إضافة هذه الميزة قريباً' : 'This feature will be added soon');
+  const handleDeleteOffer = async (offerId: string) => {
+    const confirmed = window.confirm(
+      language === 'ar' ? 'هل أنت متأكد من حذف هذا العرض؟' : 'Are you sure you want to delete this offer?'
+    );
+    if (!confirmed) return;
+    
+    await deleteOffer(offerId);
+    await fetchOffers();
+  };
+
+  const handleSaveOffer = async (offerData: any) => {
+    setIsSaving(true);
+    try {
+      if (selectedOffer) {
+        await updateOffer(selectedOffer.id, offerData);
+      } else {
+        await addOffer(offerData);
+      }
+      await fetchOffers();
+      setIsDialogOpen(false);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -100,7 +124,7 @@ const OffersManagement = () => {
                       )}
                       {offer.discount_amount && (
                         <span className="text-green-600 font-medium">
-                          {offer.discount_amount} {language === 'ar' ? 'جنيه خصم' : 'EGP OFF'}
+                          {offer.discount_amount} {language === 'ar' ? 'ج.م' : 'EGP'}
                         </span>
                       )}
                     </div>
@@ -128,6 +152,14 @@ const OffersManagement = () => {
           </div>
         )}
       </div>
+
+      <SpecialOfferDialog
+        isOpen={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        specialOffer={selectedOffer}
+        onSave={handleSaveOffer}
+        loading={isSaving}
+      />
     </div>
   );
 };
