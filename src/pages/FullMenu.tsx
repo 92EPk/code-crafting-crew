@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Plus, Star, Clock, Flame, ShoppingCart } from "lucide-react";
 import CartSidebar from "@/components/CartSidebar";
 import OrderSidebar from "@/components/OrderSidebar";
-import ProductCustomization from "@/components/ProductCustomization";
+import DynamicProductCustomization from "@/components/DynamicProductCustomization";
 import { Product, SelectedOptions, CartItem } from "@/types/product";
 import { useToast } from "@/hooks/use-toast";
 import { useMenuItems, useCategories } from "@/hooks/useDatabase";
@@ -349,7 +349,7 @@ const FullMenu = () => {
 
       {/* Product Customization Modal */}
       {customizationProduct && (
-        <ProductCustomization
+        <DynamicProductCustomization
           product={customizationProduct}
           language={language}
           isOpen={!!customizationProduct}

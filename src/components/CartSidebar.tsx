@@ -6,9 +6,11 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ShoppingCart, Plus, Minus, Trash2, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useEffect } from "react";
 import { CartItem } from "@/types/product";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
+import { supabase } from "@/integrations/supabase/client";
 
 interface CartSidebarProps {
   isOpen: boolean;
@@ -30,23 +32,38 @@ const CartSidebar = ({
   onCheckout
 }: CartSidebarProps) => {
   const { language, isRTL } = useLanguage();
-  const [customerInfo, setCustomerInfo] = useState({
-    name: '',
-    phone: '',
-    address: '',
-    notes: ''
-  });
-
+  const [deliveryFee, setDeliveryFee] = useState<number>(0);
   const { toast } = useToast();
 
   const t = translations[language];
+
+  // Fetch delivery fee from database
+  useEffect(() => {
+    const fetchDeliveryFee = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('admin_settings')
+          .select('delivery_fee')
+          .single();
+        
+        if (error) throw error;
+        setDeliveryFee(data?.delivery_fee || 0);
+      } catch (error) {
+        console.error('Error fetching delivery fee:', error);
+        setDeliveryFee(0);
+      }
+    };
+
+    if (isOpen) {
+      fetchDeliveryFee();
+    }
+  }, [isOpen]);
 
   const subtotal = cartItems.reduce((sum, item) => {
     const price = item.totalPrice || item.discountPrice || item.price;
     return sum + (price * item.quantity);
   }, 0);
 
-  const deliveryFee = subtotal >= 150 ? 0 : 15;
   const total = subtotal + deliveryFee;
 
   const handlePlaceOrder = () => {
@@ -167,9 +184,7 @@ const CartSidebar = ({
                 </div>
                 <div className="flex justify-between text-xs">
                   <span className={isRTL ? 'font-arabic' : ''}>{t.delivery}:</span>
-                  <span>
-                    {deliveryFee === 0 ? t.free : `${deliveryFee} ${t.egp}`}
-                  </span>
+                  <span>{deliveryFee.toFixed(2)} {t.egp}</span>
                 </div>
                 <Separator />
                 <div className="flex justify-between font-bold text-sm">

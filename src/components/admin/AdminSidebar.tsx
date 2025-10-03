@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import {
@@ -24,11 +24,13 @@ import {
   Utensils,
   ClipboardList,
   LogOut,
-  Globe
+  Globe,
+  Truck
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import DeliverySettingsDialog from '@/components/admin/DeliverySettingsDialog';
 
 const menuItems = [
   {
@@ -75,6 +77,7 @@ export function AdminSidebar() {
   const navigate = useNavigate();
   const currentPath = location.pathname;
   const collapsed = state === "collapsed";
+  const [isDeliveryDialogOpen, setIsDeliveryDialogOpen] = useState(false);
 
   const isActive = (path: string) => currentPath === path;
 
@@ -151,6 +154,20 @@ export function AdminSidebar() {
             variant="ghost" 
             size="sm"
             className="w-full justify-start text-gray-300 hover:text-white hover:bg-white/10"
+            onClick={() => setIsDeliveryDialogOpen(true)}
+          >
+            <Truck className={`h-4 w-4 ${collapsed ? '' : 'mr-2'} ${isRTL && !collapsed ? 'ml-2 mr-0' : ''}`} />
+            {!collapsed && (
+              <span className={isRTL ? 'font-arabic' : ''}>
+                {language === 'ar' ? 'إعدادات التوصيل' : 'Delivery Settings'}
+              </span>
+            )}
+          </Button>
+
+          <Button 
+            variant="ghost" 
+            size="sm"
+            className="w-full justify-start text-gray-300 hover:text-white hover:bg-white/10"
             onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')}
           >
             <Globe className={`h-4 w-4 ${collapsed ? '' : 'mr-2'} ${isRTL && !collapsed ? 'ml-2 mr-0' : ''}`} />
@@ -176,6 +193,12 @@ export function AdminSidebar() {
           </Button>
         </div>
       </SidebarContent>
+
+      {/* Delivery Settings Dialog */}
+      <DeliverySettingsDialog 
+        isOpen={isDeliveryDialogOpen}
+        onOpenChange={setIsDeliveryDialogOpen}
+      />
     </Sidebar>
   );
 }

@@ -29,8 +29,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Plus, Edit2, Trash2, Package, Settings, Star, Eye } from 'lucide-react';
+import { Plus, Edit2, Trash2, Package, Settings, Star, Eye, Layers } from 'lucide-react';
 import { toast } from 'sonner';
+import ProductAttributesDialog from '@/components/admin/ProductAttributesDialog';
 
 interface ProductForm {
   name_ar: string;
@@ -57,6 +58,8 @@ const ProductManagement = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [isAttributesDialogOpen, setIsAttributesDialogOpen] = useState(false);
+  const [selectedProductForAttributes, setSelectedProductForAttributes] = useState<any>(null);
   const [formData, setFormData] = useState<ProductForm>({
     name_ar: '',
     name_en: '',
@@ -157,6 +160,11 @@ const ProductManagement = () => {
     } catch (error) {
       toast.error(language === 'ar' ? 'حدث خطأ' : 'An error occurred');
     }
+  };
+
+  const handleManageAttributes = (product: any) => {
+    setSelectedProductForAttributes(product);
+    setIsAttributesDialogOpen(true);
   };
 
   const filteredProducts = selectedCategory === 'all' 
@@ -511,6 +519,16 @@ const ProductManagement = () => {
                     <Edit2 className="w-4 h-4 mr-2" />
                     {language === 'ar' ? 'تعديل' : 'Edit'}
                   </Button>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleManageAttributes(product)}
+                    className="flex-1"
+                  >
+                    <Layers className="w-4 h-4 mr-2" />
+                    {language === 'ar' ? 'الخصائص' : 'Attributes'}
+                  </Button>
                   
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
@@ -550,6 +568,16 @@ const ProductManagement = () => {
           ))
         )}
       </div>
+
+      {/* Product Attributes Dialog */}
+      {selectedProductForAttributes && (
+        <ProductAttributesDialog
+          isOpen={isAttributesDialogOpen}
+          onOpenChange={setIsAttributesDialogOpen}
+          menuItemId={selectedProductForAttributes.id}
+          menuItemName={language === 'ar' ? selectedProductForAttributes.name_ar : selectedProductForAttributes.name_en}
+        />
+      )}
     </div>
   );
 };

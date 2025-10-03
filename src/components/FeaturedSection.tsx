@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Star, Clock, Flame } from "lucide-react";
-import ProductCustomization from "./ProductCustomization";
+import DynamicProductCustomization from "./DynamicProductCustomization";
 import { Product, SelectedOptions } from "@/types/product";
 import { useMenuItems } from "@/hooks/useDatabase";
 
@@ -186,7 +186,7 @@ const FeaturedSection = ({ language, onAddToCart }: FeaturedSectionProps) => {
 
       {/* Product Customization Dialog */}
       {customizationProduct && (
-        <ProductCustomization
+        <DynamicProductCustomization
           product={customizationProduct}
           isOpen={!!customizationProduct}
           onClose={() => setCustomizationProduct(null)}

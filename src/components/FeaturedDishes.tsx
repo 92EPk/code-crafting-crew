@@ -7,7 +7,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
 import { useMenuItems } from "@/hooks/useDatabase";
 import { Product, SelectedOptions } from "@/types/product";
-import ProductCustomization from "./ProductCustomization";
+import DynamicProductCustomization from "./DynamicProductCustomization";
 
 interface FeaturedDishesProps {
   onAddToCart: (product: Product, quantity?: number, selectedOptions?: SelectedOptions, totalPrice?: number) => void;
@@ -196,7 +196,7 @@ const FeaturedDishes = ({ onAddToCart }: FeaturedDishesProps) => {
 
       {/* Customization Dialog */}
       {customizationProduct && (
-        <ProductCustomization
+        <DynamicProductCustomization
           product={customizationProduct}
           language={language}
           isOpen={true}
