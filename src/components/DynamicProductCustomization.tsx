@@ -33,7 +33,7 @@ const DynamicProductCustomization = ({
     isValidSelection,
     totalPrice,
     loading
-  } = useDynamicCustomization(product.id.toString(), product.price);
+  } = useDynamicCustomization(product.dbId || product.id.toString(), product.price);
 
   const isRTL = language === 'ar';
   
