@@ -265,7 +265,8 @@ const FullMenu = () => {
                       {product.allow_customization ? (
                         <Button
                           variant="outline"
-                          className={`flex-1 ${isRTL ? 'font-arabic' : ''}`}
+                          size="icon"
+                          className="flex-shrink-0"
                           onClick={() => handleCustomization({
                             id: parseInt(product.id.slice(-8), 16),
                             dbId: product.id,
@@ -281,8 +282,7 @@ const FullMenu = () => {
                             isOffer: product.is_offer
                           })}
                         >
-                          <Plus className="h-4 w-4 mr-2" />
-                          {t.customize}
+                          <Plus className="h-4 w-4" />
                         </Button>
                       ) : (
                         <Button
