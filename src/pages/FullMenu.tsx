@@ -262,7 +262,7 @@ const FullMenu = () => {
                     </div>
 
                     <div className="flex gap-2">
-                      {product.customization_options && product.customization_options.length > 0 ? (
+                      {product.allow_customization ? (
                         <Button
                           variant="outline"
                           className={`flex-1 ${isRTL ? 'font-arabic' : ''}`}
