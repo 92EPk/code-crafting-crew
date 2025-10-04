@@ -268,6 +268,7 @@ const FullMenu = () => {
                           className={`flex-1 ${isRTL ? 'font-arabic' : ''}`}
                           onClick={() => handleCustomization({
                             id: parseInt(product.id.slice(-8), 16),
+                            dbId: product.id,
                             name: { ar: product.name_ar, en: product.name_en },
                             description: { ar: product.description_ar || '', en: product.description_en || '' },
                             price: product.price,
@@ -288,6 +289,7 @@ const FullMenu = () => {
                           className={`flex-1 ${isRTL ? 'font-arabic' : ''}`}
                           onClick={() => addToCart({
                             id: parseInt(product.id.slice(-8), 16),
+                            dbId: product.id,
                             name: { ar: product.name_ar, en: product.name_en },
                             description: { ar: product.description_ar || '', en: product.description_en || '' },
                             price: product.price,
