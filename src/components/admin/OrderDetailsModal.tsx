@@ -157,7 +157,7 @@ const OrderDetailsModal = ({ order, isOpen, onClose, onStatusUpdate }: OrderDeta
               <Separator />
               <div className="flex justify-between text-lg font-bold">
                 <span className={isRTL ? 'font-arabic' : ''}>{t.total}:</span>
-                <span className="text-primary">{order.total_amount} {t.egp}</span>
+                <span className="text-primary">{((order as any).total || 0).toFixed(2)} {t.egp}</span>
               </div>
             </div>
           </div>
