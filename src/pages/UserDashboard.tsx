@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { translations } from '@/translations';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -16,13 +18,16 @@ import {
   LogOut,
   Settings,
   Package,
-  Clock
+  Clock,
+  Globe
 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const UserDashboard = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const { language, setLanguage, isRTL } = useLanguage();
+  const t = translations[language];
   const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => {
@@ -34,9 +39,9 @@ const UserDashboard = () => {
   const handleSignOut = async () => {
     const { error } = await signOut();
     if (error) {
-      toast.error('Error signing out');
+      toast.error(language === 'ar' ? 'خطأ في تسجيل الخروج' : 'Error signing out');
     } else {
-      toast.success('Signed out successfully');
+      toast.success(language === 'ar' ? 'تم تسجيل الخروج بنجاح' : 'Signed out successfully');
       navigate('/');
     }
   };
@@ -44,26 +49,37 @@ const UserDashboard = () => {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background/50 to-primary/5">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background/50 to-primary/5" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Header */}
       <div className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center gap-4">
               <Button 
                 variant="ghost" 
                 onClick={() => navigate('/')}
-                className="text-muted-foreground hover:text-foreground"
+                className={`text-muted-foreground hover:text-foreground ${isRTL ? 'font-arabic' : ''}`}
               >
-                ← Back to Home
+                {isRTL ? 'العودة للرئيسية ←' : '← Back to Home'}
               </Button>
               <Separator orientation="vertical" className="h-6" />
-              <h1 className="text-2xl font-bold">My Dashboard</h1>
+              <h1 className={`text-2xl font-bold ${isRTL ? 'font-arabic' : ''}`}>{t.myDashboard}</h1>
             </div>
-            <Button variant="outline" onClick={handleSignOut}>
-              <LogOut className="mr-2 h-4 w-4" />
-              Sign Out
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')}
+                className={isRTL ? 'font-arabic' : ''}
+              >
+                <Globe className="h-4 w-4 mr-2" />
+                {language === 'ar' ? 'English' : 'العربية'}
+              </Button>
+              <Button variant="outline" onClick={handleSignOut} className={isRTL ? 'font-arabic' : ''}>
+                <LogOut className="mr-2 h-4 w-4" />
+                {t.logout}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -77,7 +93,7 @@ const UserDashboard = () => {
                 <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                   <User className="h-8 w-8 text-primary" />
                 </div>
-                <CardTitle className="text-lg">Welcome back!</CardTitle>
+                <CardTitle className={`text-lg ${isRTL ? 'font-arabic' : ''}`}>{t.welcomeBack}</CardTitle>
                 <CardDescription>{user.email}</CardDescription>
               </CardHeader>
             </Card>
@@ -88,7 +104,7 @@ const UserDashboard = () => {
                 <CardContent className="p-4 text-center">
                   <ShoppingBag className="h-6 w-6 text-primary mx-auto mb-2" />
                   <div className="text-2xl font-bold">0</div>
-                  <div className="text-sm text-muted-foreground">Total Orders</div>
+                  <div className={`text-sm text-muted-foreground ${isRTL ? 'font-arabic' : ''}`}>{t.totalOrdersCount}</div>
                 </CardContent>
               </Card>
 
@@ -96,7 +112,7 @@ const UserDashboard = () => {
                 <CardContent className="p-4 text-center">
                   <Heart className="h-6 w-6 text-red-500 mx-auto mb-2" />
                   <div className="text-2xl font-bold">0</div>
-                  <div className="text-sm text-muted-foreground">Favorites</div>
+                  <div className={`text-sm text-muted-foreground ${isRTL ? 'font-arabic' : ''}`}>{t.favorites}</div>
                 </CardContent>
               </Card>
             </div>
@@ -106,12 +122,12 @@ const UserDashboard = () => {
           <div className="lg:col-span-3">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
               <TabsList className="grid w-full grid-cols-6">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="profile">Profile</TabsTrigger>
-                <TabsTrigger value="orders">Orders</TabsTrigger>
-                <TabsTrigger value="favorites">Favorites</TabsTrigger>
-                <TabsTrigger value="addresses">Addresses</TabsTrigger>
-                <TabsTrigger value="notifications">Notifications</TabsTrigger>
+                <TabsTrigger value="overview" className={isRTL ? 'font-arabic' : ''}>{t.overview}</TabsTrigger>
+                <TabsTrigger value="profile" className={isRTL ? 'font-arabic' : ''}>{t.profile}</TabsTrigger>
+                <TabsTrigger value="orders" className={isRTL ? 'font-arabic' : ''}>{t.orders}</TabsTrigger>
+                <TabsTrigger value="favorites" className={isRTL ? 'font-arabic' : ''}>{t.favorites}</TabsTrigger>
+                <TabsTrigger value="addresses" className={isRTL ? 'font-arabic' : ''}>{t.addresses}</TabsTrigger>
+                <TabsTrigger value="notifications" className={isRTL ? 'font-arabic' : ''}>{t.notifications}</TabsTrigger>
               </TabsList>
 
               <TabsContent value="overview" className="space-y-6">
@@ -119,12 +135,12 @@ const UserDashboard = () => {
                   <Card className="border-dashed border-2 border-muted-foreground/25">
                     <CardContent className="p-6 text-center">
                       <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                      <h3 className="font-semibold mb-2">No Recent Orders</h3>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        You haven't placed any orders yet. Start exploring our menu!
+                      <h3 className={`font-semibold mb-2 ${isRTL ? 'font-arabic' : ''}`}>{t.noRecentOrders}</h3>
+                      <p className={`text-sm text-muted-foreground mb-4 ${isRTL ? 'font-arabic' : ''}`}>
+                        {t.noRecentOrdersDesc}
                       </p>
-                      <Button size="sm" onClick={() => navigate('/menu')}>
-                        Browse Menu
+                      <Button size="sm" onClick={() => navigate('/menu')} className={isRTL ? 'font-arabic' : ''}>
+                        {t.browseMenu}
                       </Button>
                     </CardContent>
                   </Card>
@@ -132,12 +148,12 @@ const UserDashboard = () => {
                   <Card className="border-dashed border-2 border-muted-foreground/25">
                     <CardContent className="p-6 text-center">
                       <Heart className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                      <h3 className="font-semibold mb-2">No Favorite Items</h3>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        Save your favorite dishes for quick access
+                      <h3 className={`font-semibold mb-2 ${isRTL ? 'font-arabic' : ''}`}>{t.noFavoriteItems}</h3>
+                      <p className={`text-sm text-muted-foreground mb-4 ${isRTL ? 'font-arabic' : ''}`}>
+                        {t.noFavoriteItemsDesc}
                       </p>
-                      <Button size="sm" variant="outline" onClick={() => setActiveTab('favorites')}>
-                        View Favorites
+                      <Button size="sm" variant="outline" onClick={() => setActiveTab('favorites')} className={isRTL ? 'font-arabic' : ''}>
+                        {t.viewFavorites}
                       </Button>
                     </CardContent>
                   </Card>
@@ -145,12 +161,12 @@ const UserDashboard = () => {
                   <Card className="border-dashed border-2 border-muted-foreground/25">
                     <CardContent className="p-6 text-center">
                       <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                      <h3 className="font-semibold mb-2">Add Address</h3>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        Add your delivery addresses for faster checkout
+                      <h3 className={`font-semibold mb-2 ${isRTL ? 'font-arabic' : ''}`}>{t.addAddress}</h3>
+                      <p className={`text-sm text-muted-foreground mb-4 ${isRTL ? 'font-arabic' : ''}`}>
+                        {t.addAddressDesc}
                       </p>
-                      <Button size="sm" variant="outline" onClick={() => setActiveTab('addresses')}>
-                        Manage Addresses
+                      <Button size="sm" variant="outline" onClick={() => setActiveTab('addresses')} className={isRTL ? 'font-arabic' : ''}>
+                        {t.manageAddresses}
                       </Button>
                     </CardContent>
                   </Card>
@@ -160,19 +176,19 @@ const UserDashboard = () => {
               <TabsContent value="profile" className="space-y-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <Settings className="mr-2 h-5 w-5" />
-                      Profile Settings
+                    <CardTitle className={`flex items-center ${isRTL ? 'font-arabic' : ''}`}>
+                      <Settings className={`h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                      {t.profileSettings}
                     </CardTitle>
-                    <CardDescription>
-                      Manage your account information and preferences
+                    <CardDescription className={isRTL ? 'font-arabic' : ''}>
+                      {t.profileSettingsDesc}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="text-center py-8">
                       <User className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                      <p className="text-muted-foreground">
-                        Profile management features coming soon...
+                      <p className={`text-muted-foreground ${isRTL ? 'font-arabic' : ''}`}>
+                        {t.profileComingSoon}
                       </p>
                     </div>
                   </CardContent>
@@ -182,23 +198,23 @@ const UserDashboard = () => {
               <TabsContent value="orders" className="space-y-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <ShoppingBag className="mr-2 h-5 w-5" />
-                      Order History
+                    <CardTitle className={`flex items-center ${isRTL ? 'font-arabic' : ''}`}>
+                      <ShoppingBag className={`h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                      {t.orderHistory}
                     </CardTitle>
-                    <CardDescription>
-                      View and track your past orders
+                    <CardDescription className={isRTL ? 'font-arabic' : ''}>
+                      {t.orderHistoryDesc}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center py-8">
                       <Clock className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                      <h3 className="text-lg font-semibold mb-2">No Orders Yet</h3>
-                      <p className="text-muted-foreground mb-4">
-                        When you place your first order, it will appear here
+                      <h3 className={`text-lg font-semibold mb-2 ${isRTL ? 'font-arabic' : ''}`}>{t.noOrdersYetTitle}</h3>
+                      <p className={`text-muted-foreground mb-4 ${isRTL ? 'font-arabic' : ''}`}>
+                        {t.noOrdersYetDesc}
                       </p>
-                      <Button onClick={() => navigate('/menu')}>
-                        Start Shopping
+                      <Button onClick={() => navigate('/menu')} className={isRTL ? 'font-arabic' : ''}>
+                        {t.startShopping}
                       </Button>
                     </div>
                   </CardContent>
@@ -208,23 +224,23 @@ const UserDashboard = () => {
               <TabsContent value="favorites" className="space-y-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <Heart className="mr-2 h-5 w-5" />
-                      Favorite Items
+                    <CardTitle className={`flex items-center ${isRTL ? 'font-arabic' : ''}`}>
+                      <Heart className={`h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                      {t.favoriteItems}
                     </CardTitle>
-                    <CardDescription>
-                      Your saved favorite dishes
+                    <CardDescription className={isRTL ? 'font-arabic' : ''}>
+                      {t.savedFavorites}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center py-8">
                       <Heart className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                      <h3 className="text-lg font-semibold mb-2">No Favorites Yet</h3>
-                      <p className="text-muted-foreground mb-4">
-                        Save your favorite dishes for easy reordering
+                      <h3 className={`text-lg font-semibold mb-2 ${isRTL ? 'font-arabic' : ''}`}>{t.noFavoritesYet}</h3>
+                      <p className={`text-muted-foreground mb-4 ${isRTL ? 'font-arabic' : ''}`}>
+                        {t.noFavoritesYetDesc}
                       </p>
-                      <Button onClick={() => navigate('/menu')}>
-                        Browse Menu
+                      <Button onClick={() => navigate('/menu')} className={isRTL ? 'font-arabic' : ''}>
+                        {t.browseMenu}
                       </Button>
                     </div>
                   </CardContent>
@@ -234,23 +250,23 @@ const UserDashboard = () => {
               <TabsContent value="addresses" className="space-y-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <MapPin className="mr-2 h-5 w-5" />
-                      Delivery Addresses
+                    <CardTitle className={`flex items-center ${isRTL ? 'font-arabic' : ''}`}>
+                      <MapPin className={`h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                      {t.deliveryAddresses}
                     </CardTitle>
-                    <CardDescription>
-                      Manage your delivery locations
+                    <CardDescription className={isRTL ? 'font-arabic' : ''}>
+                      {t.manageLocations}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center py-8">
                       <MapPin className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                      <h3 className="text-lg font-semibold mb-2">No Addresses Saved</h3>
-                      <p className="text-muted-foreground mb-4">
-                        Add delivery addresses for faster checkout
+                      <h3 className={`text-lg font-semibold mb-2 ${isRTL ? 'font-arabic' : ''}`}>{t.noAddressesSaved}</h3>
+                      <p className={`text-muted-foreground mb-4 ${isRTL ? 'font-arabic' : ''}`}>
+                        {t.noAddressesSavedDesc}
                       </p>
-                      <Button>
-                        Add New Address
+                      <Button className={isRTL ? 'font-arabic' : ''}>
+                        {t.addNewAddress}
                       </Button>
                     </div>
                   </CardContent>
@@ -260,20 +276,20 @@ const UserDashboard = () => {
               <TabsContent value="notifications" className="space-y-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <Bell className="mr-2 h-5 w-5" />
-                      Notifications
+                    <CardTitle className={`flex items-center ${isRTL ? 'font-arabic' : ''}`}>
+                      <Bell className={`h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                      {t.notificationsTitle}
                     </CardTitle>
-                    <CardDescription>
-                      Stay updated with your orders and offers
+                    <CardDescription className={isRTL ? 'font-arabic' : ''}>
+                      {t.notificationsDesc}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center py-8">
                       <Bell className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                      <h3 className="text-lg font-semibold mb-2">No Notifications</h3>
-                      <p className="text-muted-foreground">
-                        You're all caught up!
+                      <h3 className={`text-lg font-semibold mb-2 ${isRTL ? 'font-arabic' : ''}`}>{t.noNotifications}</h3>
+                      <p className={`text-muted-foreground ${isRTL ? 'font-arabic' : ''}`}>
+                        {t.allCaughtUp}
                       </p>
                     </div>
                   </CardContent>

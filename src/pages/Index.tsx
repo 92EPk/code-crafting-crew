@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import Header from "@/components/Header";
 import ModernHero from "@/components/ModernHero";
 import FeaturedDishes from "@/components/FeaturedDishes";
@@ -12,16 +13,16 @@ import OrderSidebar from "@/components/OrderSidebar";
 import { Product, SelectedOptions, CartItem } from "@/types/product";
 
 const Index = () => {
-  const [language, setLanguage] = useState<'ar' | 'en'>('ar');
+  const { language, isRTL } = useLanguage();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isOrderOpen, setIsOrderOpen] = useState(false);
 
   // Set document direction based on language
   useEffect(() => {
-    document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
     document.documentElement.lang = language;
-  }, [language]);
+  }, [language, isRTL]);
 
   // Load cart from localStorage
   useEffect(() => {
@@ -39,10 +40,6 @@ const Index = () => {
   useEffect(() => {
     localStorage.setItem('mixandtaste-cart', JSON.stringify(cartItems));
   }, [cartItems]);
-
-  const handleLanguageChange = (newLanguage: 'ar' | 'en') => {
-    setLanguage(newLanguage);
-  };
 
   const handleAddToCart = (product: Product, quantity: number = 1, selectedOptions: SelectedOptions = {}, totalPrice?: number) => {
     setCartItems(currentItems => {
