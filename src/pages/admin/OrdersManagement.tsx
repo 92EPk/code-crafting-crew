@@ -146,7 +146,7 @@ const OrdersManagement = () => {
                       {getStatusLabel(order.status)}
                     </Badge>
                     <span className="font-medium">
-                      {order.total_amount} {language === 'ar' ? 'جنيه' : 'EGP'}
+                      {(order.total_amount || 0).toFixed(2)} {language === 'ar' ? 'جنيه' : 'EGP'}
                     </span>
                   </div>
                 </div>
