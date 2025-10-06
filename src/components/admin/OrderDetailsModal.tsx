@@ -98,15 +98,27 @@ const OrderDetailsModal = ({ order, isOpen, onClose, onStatusUpdate }: OrderDeta
                         </p>
                       )}
                       {Object.keys(item.selected_options).length > 0 && (
-                        <div className={`text-xs text-muted-foreground mt-1 ${isRTL ? 'font-arabic' : ''}`}>
-                          <span className="font-medium">
-                            {language === 'ar' ? 'التخصيص: ' : 'Customization: '}
+                        <div className={`text-xs mt-2 space-y-1 ${isRTL ? 'font-arabic' : ''}`}>
+                          <span className="font-medium text-foreground block mb-1">
+                            {language === 'ar' ? 'التخصيصات:' : 'Customizations:'}
                           </span>
-                          {Object.entries(item.selected_options).map(([key, value]) => (
-                            <span key={key} className="mr-2">
-                              {key}: {typeof value === 'string' ? value : JSON.stringify(value)}
-                            </span>
-                          ))}
+                          <div className="flex flex-wrap gap-2">
+                            {Object.entries(item.selected_options).map(([key, value]) => {
+                              // Extract just the option name without price from value like "صوص أحمر (+0 ج.م)"
+                              const displayValue = typeof value === 'string' 
+                                ? value.replace(/\s*\([^)]*\)\s*/g, '').trim()
+                                : JSON.stringify(value);
+                              
+                              return (
+                                <span 
+                                  key={key} 
+                                  className="inline-flex items-center px-2 py-1 bg-primary/10 text-primary rounded-md text-xs font-medium"
+                                >
+                                  {displayValue}
+                                </span>
+                              );
+                            })}
+                          </div>
                         </div>
                       )}
                     </div>
