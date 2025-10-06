@@ -319,7 +319,17 @@ export const useRestaurant = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setOrders(data as SimpleOrder[] || []);
+      
+      // Transform the data to match SimpleOrder type
+      const transformedOrders = (data || []).map(order => ({
+        ...order,
+        order_items: order.order_items?.map((item: any) => ({
+          ...item,
+          menu_item: item.menu_items // Rename menu_items to menu_item
+        }))
+      }));
+      
+      setOrders(transformedOrders as SimpleOrder[] || []);
     } catch (error: any) {
       toast.error('Error loading orders: ' + error.message);
     } finally {
