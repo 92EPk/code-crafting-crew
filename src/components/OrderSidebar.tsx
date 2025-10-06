@@ -105,6 +105,7 @@ const OrderSidebar = ({ language, isOpen, onOpenChange, cartItems, onOrderComple
       const orderData = {
         customer_name: customerInfo.name,
         customer_phone: customerInfo.phone,
+        customer_address: customerInfo.address,
         total: total,
         items: cartItems.map(item => ({
           menu_item_id: item.dbId || `temp-${item.id}`,

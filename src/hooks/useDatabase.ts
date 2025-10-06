@@ -349,11 +349,31 @@ export const useOrders = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from('orders')
-        .select('*')
+        .select(`
+          *,
+          order_items(
+            *,
+            menu_items(*)
+          )
+        `)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setOrders(data || []);
+      
+      // Transform data to match our Order type
+      const transformedOrders = (data || []).map(order => ({
+        ...order,
+        order_items: (order.order_items || []).map((item: any) => ({
+          ...item,
+          selected_options: item.selected_options as Record<string, any>,
+          menu_item: item.menu_items ? {
+            ...item.menu_items,
+            customization_options: item.menu_items.customization_options || []
+          } : undefined
+        }))
+      })) as Order[];
+      
+      setOrders(transformedOrders);
       setError(null);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Error loading orders';
@@ -367,15 +387,18 @@ export const useOrders = () => {
   const createOrder = async (orderData: {
     customer_name: string;
     customer_phone: string;
+    customer_address: string;
     total: number;
     items: any;
   }) => {
     try {
-      const { data, error } = await supabase
+      // First, insert the order
+      const { data: newOrder, error: orderError } = await supabase
         .from('orders')
         .insert({
           customer_name: orderData.customer_name,
           customer_phone: orderData.customer_phone,
+          customer_address: orderData.customer_address,
           total: orderData.total,
           items: orderData.items,
           status: 'new'
@@ -383,15 +406,36 @@ export const useOrders = () => {
         .select()
         .single();
 
-      if (error) throw error;
+      if (orderError) throw orderError;
+
+      // Then, insert the order items separately
+      if (Array.isArray(orderData.items) && orderData.items.length > 0) {
+        const orderItems = orderData.items.map((item: any) => ({
+          order_id: newOrder.id,
+          menu_item_id: item.menu_item_id,
+          quantity: item.quantity,
+          unit_price: item.unit_price,
+          selected_options: item.selected_options || {},
+          total_price: item.total_price
+        }));
+
+        const { error: itemsError } = await supabase
+          .from('order_items')
+          .insert(orderItems);
+
+        if (itemsError) {
+          console.error('Error inserting order items:', itemsError);
+          // Don't throw here, order is already created
+        }
+      }
 
       toast({
         title: "Order Created",
-        description: `Order #${data.id.slice(0, 8)} has been created successfully`,
+        description: `Order #${newOrder.id.slice(0, 8)} has been created successfully`,
       });
 
       await fetchOrders();
-      return data;
+      return newOrder;
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Error creating order';
       toast({
